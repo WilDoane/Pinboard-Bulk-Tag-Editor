@@ -1,0 +1,131 @@
+<html>
+<head> 
+  <script type="text/javascript">
+
+var urlBase = "https://@api.pinboard.in/v1/tags/";
+
+var req, tags, timer, output;
+
+function loadXMLDoc() {
+  req = false;
+  req = new XMLHttpRequest();
+  if(req) {
+    req.onreadystatechange = processReqChange;
+    req.open("GET", urlBase + 'get', true);
+    req.send("");
+  }
+
+}
+
+function processReqChange() {
+  // only if req shows "loaded"
+  if (req.readyState == 4) {
+    // only if "OK"
+    if (req.status == 200) {
+      // ...processing statements go here...
+
+
+      document.write("<p><a href='javascript:scheduleUpdates();'>UPDATE CHANGED TAGS</a></p>");
+
+      document.write("<table cellpadding=3>");
+      document.write("<tr style='background-color:#ccc;'><td align='right'>EXISTING TAG</td><td>COUNT</td><td>REPLACE WITH/FOLD INTO...</td></tr>")
+      tags = req.responseXML.getElementsByTagName("tag");
+
+      for (var i = 0; i < tags.length; i++) {
+        document.write("<tr>");
+        document.write("<td align='right' id='origtag" + i + "'>");
+        document.write(tags[i].getAttribute("tag"));
+        document.write("</td>");
+        document.write("<td align='right' bgcolor='#ccc'>");
+        document.write(tags[i].getAttribute("count"));
+        document.write("</td>");
+        document.write("<td>");
+        //document.write("<input id='newtag" + i + "' type=text size=50 value='" + tags[i].getAttribute("tag").replace(/[+_]/g, '-') + "' />");
+        document.write("<input id='newtag" + i + "' type=text size=50 value='" + tags[i].getAttribute("tag") + "' />");
+        document.write("</td>");
+        document.write("</tr>");
+      }
+      document.write("</table>");
+      document.write("<div id='output' style='position:absolute; top:10px; left:700px; background-color:#ccc;'><div>")
+    } else {
+      alert("There was a problem retrieving the XML data:\n" + req.statusText);
+    }
+  }
+}
+
+
+function scheduleUpdates() {
+  outputWrite("Please be patient... each change takes about 2 seconds, to comply with the PinBoard terms of service.", true);
+  timer = setInterval(processNextUpdate, 2000);
+}
+
+function submitChange(url) {
+  req = false;
+  req = new XMLHttpRequest();
+  if(req) {
+    req.onreadystatechange = processChangeResp;
+    req.open("GET", url, true);
+    req.send("");
+  }
+
+}
+
+function processChangeResp() {
+  // only if req shows "loaded"
+  if (req.readyState == 4) {
+    // only if "OK"
+    if (req.status == 200) {
+      outputWrite("...completed: " + req.statusText);
+    } else {
+      alert("There was a problem retrieving the XML data:\n" + req.statusText);
+    }
+  }
+}
+
+
+
+function processNextUpdate() {
+  var i, changed;
+  i = 0;
+  changed = 0;
+
+  while ( (changed === 0) && (i < tags.length) ) {
+    origNode = document.getElementById('origtag' + i); 
+    newNode  = document.getElementById('newtag' + i);
+
+    origValue = origNode.innerHTML; // because it's a table cell
+    newValue = newNode.value; // because it's a form field
+
+    if (origValue !== newValue) {
+      changed++;
+      origNode.innerHTML = newNode.value;
+      query = urlBase + "rename?old=" + encodeURIComponent(origValue) + "&new=" + encodeURIComponent(newValue);
+      outputWrite(origValue + '&nbsp;&nbsp;&nbsp;&nbsp;---&gt;&nbsp;&nbsp;&nbsp;&nbsp;' + newValue);
+
+      submitChange(query);
+    }
+
+    i++;
+  }
+
+  if (changed === 0) {
+    outputWrite("DONE");
+    clearInterval(timer);
+  }
+}
+
+function outputWrite(mesg, clear) {
+    output = document.getElementById("output");
+    if (clear === true) {
+        output.innerHTML = "<p>" + mesg + "</p>";
+    } else {
+        output.innerHTML += "<p>" + mesg + "</p>";
+    }
+}
+
+
+  </script>
+</head>
+<body onload="javascript:loadXMLDoc()">
+</body>
+</html>
