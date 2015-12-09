@@ -17,6 +17,8 @@ function loadXMLDoc() {
 
 }
 
+var nodesArray;
+
 function processReqChange() {
   // only if req shows "loaded"
   if (req.readyState == 4) {
@@ -29,8 +31,18 @@ function processReqChange() {
 
       document.write("<table cellpadding=3>");
       document.write("<tr style='background-color:#ccc;'><td align='right'>EXISTING TAG</td><td>COUNT</td><td>REPLACE WITH/FOLD INTO...</td></tr>")
-      tags = req.responseXML.getElementsByTagName("tag");
-
+      
+      ////////////////////////////////////////////////////////////
+      //   Sort alphabetical by tag name
+      ////////////////////////////////////////////////////////////
+      
+      tags = Array.prototype.slice.call(req.responseXML.getElementsByTagName("tag"))
+      
+      tags.sort(function(a, b) {
+        return (a.getAttribute('tag').toLowerCase() < b.getAttribute('tag').toLowerCase() ? -1 : 1);
+        return 0; // if they're equal
+      });
+      
       for (var i = 0; i < tags.length; i++) {
         document.write("<tr>");
         document.write("<td align='right' id='origtag" + i + "'>");
