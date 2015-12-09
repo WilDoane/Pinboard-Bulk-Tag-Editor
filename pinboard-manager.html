@@ -105,7 +105,8 @@ function processNextUpdate() {
     origNode = document.getElementById('origtag' + i); 
     newNode  = document.getElementById('newtag' + i);
 
-    origValue = origNode.innerHTML; // because it's a table cell
+    // innerText rather than innerHTML because innerHTML("&") == "&amp;"
+    origValue = origNode.innerText; // because it's a table cell; 
     newValue = newNode.value; // because it's a form field
 
     if (origValue !== newValue) {
