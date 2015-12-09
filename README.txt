@@ -8,8 +8,8 @@ When ready, click the "UPDATE CHANGED TAGS" link at the top of the page.
 
 You'll see a div showing the progress of the update. Updates are rate-limited to 1 change every 2 seconds, to comply with Pinboard's API terms of use.
 
-This has been tested in Safari 5.1 ONLY
+This has been tested in Safari 5.1 through Safari 9.0.1 ONLY
 
 Use at your own risk.
 
-2015-12-08: Present tags in alpha order by tag name (Thanks for the suggestion got to Josh Wagner)
+2015-12-08: Present tags in alpha order by tag name (Thanks for the suggestion go to Josh Wagner)
