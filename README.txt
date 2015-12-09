@@ -12,4 +12,4 @@ This has been tested in Safari 5.1 ONLY
 
 Use at your own risk.
 
-2015-12-08: Present tags in alpha order by tag name (Thanks for the suggestion got to Josh Wagner)
+2015-12-08: Present tags in alpha order by tag name (Thanks for the suggestion go to Josh Wagner)
