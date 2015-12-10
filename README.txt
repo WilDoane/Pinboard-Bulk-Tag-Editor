@@ -14,3 +14,4 @@ Use at your own risk.
 
 2015-12-08: Present tags in alpha order by tag name (Thanks for the suggestion go to Josh Wagner)
 2015-12-09: Now properly handles Pinboard tags that contain an ampersand: r&d
+2015-12-09: Made tag names active links to user's tagged bookmarks. Requires the user to enter their PinBoard username (only once per bulk manager session). (Thanks for the suggestion go to Josh Wagner)

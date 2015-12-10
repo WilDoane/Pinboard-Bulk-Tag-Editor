@@ -4,7 +4,7 @@
 
 var urlBase = "https://@api.pinboard.in/v1/tags/";
 
-var req, tags, timer, output;
+var req, tags, timer, output, username;
 
 function loadXMLDoc() {
   req = false;
@@ -46,7 +46,9 @@ function processReqChange() {
       for (var i = 0; i < tags.length; i++) {
         document.write("<tr>");
         document.write("<td align='right' id='origtag" + i + "'>");
+        document.write("<a href='javascript:openUsersTagsPage(" + i + ")'>")
         document.write(tags[i].getAttribute("tag"));
+        document.write("</a>")
         document.write("</td>");
         document.write("<td align='right' bgcolor='#ccc'>");
         document.write(tags[i].getAttribute("count"));
@@ -94,7 +96,16 @@ function processChangeResp() {
   }
 }
 
-
+function openUsersTagsPage(i) {
+  if (username == null) {
+    username = window.prompt("Please enter your PinBoard username. Your username is not stored. You'll be asked for it once each time you reload this bulk manager page and click a tag. Your PinBoard username is required to construct your user-specific URL to view your tagged bookmarks (e.g., https://pinboard.in/u:someuser/t:sometag/):", "");
+  }
+  
+  tagName = document.getElementById('origtag' + i).innerText;
+  usersTagsURL = "https://pinboard.in/u:" + username + "/t:" + encodeURIComponent(tagName) + "/";
+  //console.log(usersTagsURL);
+  window.open(usersTagsURL, "_blank");
+}
 
 function processNextUpdate() {
   var i, changed;
